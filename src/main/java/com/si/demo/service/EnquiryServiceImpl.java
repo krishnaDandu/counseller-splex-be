@@ -1,9 +1,6 @@
 package com.si.demo.service;
 
-import com.si.demo.dto.DashboardEnquiryChatResponseDto;
-import com.si.demo.dto.EnquiryFilterDto;
-import com.si.demo.dto.EnquiryRequestDto;
-import com.si.demo.dto.EnquiryResponseDto;
+import com.si.demo.dto.*;
 import com.si.demo.entity.Counsellor;
 import com.si.demo.entity.Course;
 import com.si.demo.entity.Enquiry;
@@ -15,7 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class EnquiryServiceImpl implements EnquiryService {
@@ -65,6 +62,60 @@ public class EnquiryServiceImpl implements EnquiryService {
     public List<Enquiry> findAllEnquiry() {
         return enquiryRepo.findAll();
     }
+
+    @Override
+    public ApiResponseDto<List<EnquiryResponseDto>> findByCounsellorId(Integer counsellorId) {
+        List<Enquiry> enquiries =
+                enquiryRepo.findByCounsellor_CounsellorId(counsellorId);
+
+        List<EnquiryResponseDto> data = enquiries.stream()
+                .map(enquiry -> {
+                    EnquiryResponseDto dto = new EnquiryResponseDto();
+
+                    dto.setEnqId(enquiry.getEnqId());
+                    dto.setStuName(enquiry.getStuName());
+                    dto.setStuPhno(enquiry.getStuPhno());
+                    dto.setClassMode(enquiry.getClassMode());
+                    dto.setEnqStatus(enquiry.getEnqStatus());
+
+                    if (enquiry.getCourse() != null) {
+                        dto.setCourseId(enquiry.getCourse().getCourseId());
+                        dto.setCourseName(enquiry.getCourse().getCourseName());
+                    }
+
+                    dto.setCreatedAt(enquiry.getCreatedAt());
+
+                    return dto;
+                })
+                .toList();
+
+        String message = data.isEmpty()
+                ? "No enquiries found"
+                : "Data found";
+
+        return new ApiResponseDto<>(message, data);
+    }
+
+
+    //    @Override
+//    public Map<String, Object> findByCounsellorId(Integer counsellorId) {
+//
+//        List<Enquiry> enquiries  = enquiryRepo.findByCounsellor_CounsellorId(counsellorId);
+//
+//        Map<String, Object> response = new HashMap<>();
+//
+//        if(enquiries.isEmpty()){
+//            response.put("message", "No enquiries found");
+//            response.put("data", response);
+//        }else {
+//            response.put("message", "Data found");
+//            response.put("data", response);
+//        }
+////        if(enquiryList.isEmpty()){
+////            throw new RuntimeException("No enquiries found for counsellorId: " + counsellorId);
+////        }
+//        return response;
+//    }
 
     @Override
     public DashboardEnquiryChatResponseDto getDashboardCounts() {

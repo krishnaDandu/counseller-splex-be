@@ -1,5 +1,6 @@
 package com.si.demo.controller;
 
+import com.si.demo.dto.ApiResponseDto;
 import com.si.demo.dto.DashboardEnquiryChatResponseDto;
 import com.si.demo.dto.EnquiryRequestDto;
 import com.si.demo.dto.EnquiryResponseDto;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/enquiries")
@@ -47,11 +49,28 @@ public class EnquiryController {
 //        return ResponseEntity.status(HttpStatus.CREATED).body(saveEnquiry);
 //    }
 
+//    @GetMapping("/getAllEnquiries")
+//    public ResponseEntity<List<Enquiry>> getAllEnquries(){
+//        List<Enquiry> resEnquiry = enquiryService.findAllEnquiry();
+//        return ResponseEntity.ok(resEnquiry);
+//    }
+
+//    @GetMapping("/getAllEnquiries")
+//    public ResponseEntity<List<Enquiry>> getAllEnquries(@RequestParam Integer counsellorId){
+//        List<Enquiry> resEnquiry = enquiryService.findByCounsellorId(counsellorId);
+//        System.out.println("getAllEnquries :" + resEnquiry);
+//        return ResponseEntity.ok(resEnquiry);
+//    }
+
     @GetMapping("/getAllEnquiries")
-    public ResponseEntity<List<Enquiry>> getAllEnquries(){
-        List<Enquiry> resEnquiry = enquiryService.findAllEnquiry();
-        return ResponseEntity.ok(resEnquiry);
+    public ResponseEntity<ApiResponseDto<List<EnquiryResponseDto>>> getAllEnquries(@RequestParam Integer counsellorId){
+        ApiResponseDto<List<EnquiryResponseDto>> response = enquiryService.findByCounsellorId(counsellorId);
+        System.out.println("getAllEnquries :" + response);
+        return ResponseEntity.ok(response);
     }
+
+//    @GetMapping("/enquiries/search")
+//    public ResponseEntity
 
     @GetMapping("/dashboardChart")
     public ResponseEntity<DashboardEnquiryChatResponseDto> getDashboard(){
@@ -59,6 +78,8 @@ public class EnquiryController {
         System.out.println("getDashboard : " + response );
         return ResponseEntity.ok(response);
     }
+
+
 }
 
 //    @PostMapping

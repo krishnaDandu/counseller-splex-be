@@ -1,19 +1,19 @@
 package com.si.demo.service;
 
-import com.si.demo.dto.DashboardEnquiryChatResponseDto;
-import com.si.demo.dto.EnquiryFilterDto;
-import com.si.demo.dto.EnquiryRequestDto;
-import com.si.demo.dto.EnquiryResponseDto;
-import com.si.demo.entity.Counsellor;
+import com.si.demo.dto.*;
 import com.si.demo.entity.Enquiry;
 
 import java.util.List;
+import java.util.Map;
 
 public interface EnquiryService {
 
     Enquiry saveEnquiry(EnquiryRequestDto enquiryRequestDto);
 
     List<Enquiry> findAllEnquiry();
+
+    //List<Enquiry> findByCounsellorId(Integer counsellorId);
+    ApiResponseDto<List<EnquiryResponseDto>> findByCounsellorId(Integer counsellorId);
 
     DashboardEnquiryChatResponseDto getDashboardCounts();
 
