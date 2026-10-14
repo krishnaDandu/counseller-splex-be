@@ -7,6 +7,8 @@ import com.si.demo.entity.Enquiry;
 import com.si.demo.repo.CounsellorRepo;
 import com.si.demo.repo.CourseRepo;
 import com.si.demo.repo.EnquiryRepo;
+import com.si.demo.specification.EnquirySpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -134,7 +136,36 @@ public class EnquiryServiceImpl implements EnquiryService {
     }
 
     @Override
-    public List<EnquiryResponseDto> searchEnquries(EnquiryFilterDto enquiryFilterDto) {
-        return List.of();
+    public List<EnquiryResponseDto> searchEnquries(EnquiryFilterDto filterDto) {
+
+        Specification<Enquiry> specification = EnquirySpecification.fiter(
+                filterDto.getStuName(),
+                filterDto.getStuPhno(),
+                filterDto.getCourseId()
+        );
+
+        List<Enquiry> enquiries = enquiryRepo.findAll(specification);
+
+        return enquiries.stream()
+                .map(enquiry -> {
+                    EnquiryResponseDto dto = new EnquiryResponseDto();
+
+                    dto.setEnqId(enquiry.getEnqId());
+                    dto.setStuName(enquiry.getStuName());
+                    dto.setStuPhno(enquiry.getStuPhno());
+                    dto.setClassMode(enquiry.getClassMode());
+                    dto.setEnqStatus(enquiry.getEnqStatus());
+                    dto.setCreatedAt(enquiry.getCreatedAt());
+
+                    if (enquiry.getCourse() != null) {
+                        dto.setCourseId(enquiry.getCourse().getCourseId());
+                        dto.setCourseName(enquiry.getCourse().getCourseName());
+                    }
+
+                    return dto;
+                }).toList();
+
+
+
     }
 }

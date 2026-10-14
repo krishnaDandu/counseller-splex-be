@@ -57,6 +57,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,
                                 "/api/enquiries"
                         ).hasRole("COUNSELLOR")
+                        //.anyRequest().authenticated()
+
+                        //Search enquiries
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/enquiries/search"
+                                ).hasRole("COUNSELLOR")
                         .anyRequest().authenticated()
                 )
 

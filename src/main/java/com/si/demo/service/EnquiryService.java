@@ -18,4 +18,6 @@ public interface EnquiryService {
     DashboardEnquiryChatResponseDto getDashboardCounts();
 
     List<EnquiryResponseDto> searchEnquries(EnquiryFilterDto enquiryFilterDto);
+
+
 }

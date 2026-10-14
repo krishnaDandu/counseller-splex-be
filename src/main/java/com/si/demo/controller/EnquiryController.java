@@ -1,17 +1,16 @@
 package com.si.demo.controller;
 
-import com.si.demo.dto.ApiResponseDto;
-import com.si.demo.dto.DashboardEnquiryChatResponseDto;
-import com.si.demo.dto.EnquiryRequestDto;
-import com.si.demo.dto.EnquiryResponseDto;
+import com.si.demo.dto.*;
 import com.si.demo.entity.Enquiry;
 import com.si.demo.service.EnquiryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/enquiries")
@@ -69,8 +68,18 @@ public class EnquiryController {
         return ResponseEntity.ok(response);
     }
 
-//    @GetMapping("/enquiries/search")
-//    public ResponseEntity
+    @GetMapping("/search")
+    public ResponseEntity<Map<String, Object>> getEnquriesBySearch(@ModelAttribute EnquiryFilterDto filterDto){
+
+        List<EnquiryResponseDto> data = enquiryService.searchEnquries(filterDto );
+        Map<String, Object> response = new HashMap<>();
+        response.put(
+                "message",
+                data.isEmpty() ? "No enquiries found" : "Data found"
+        );
+        response.put("data", data);
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/dashboardChart")
     public ResponseEntity<DashboardEnquiryChatResponseDto> getDashboard(){
