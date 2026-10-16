@@ -46,6 +46,7 @@ public class EnquiryController {
     public ResponseEntity<ApiResponseDto<EnquiryRequestDto>> updateEnquiry(
             @PathVariable Integer enqId, @RequestBody EnquiryRequestDto requestDto){
 
+        System.out.println("Test");
         Enquiry updatedEnquiry = enquiryService.upDateEnquiry(enqId, requestDto);
 
         EnquiryRequestDto response = new EnquiryRequestDto();
