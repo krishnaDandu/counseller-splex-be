@@ -1,20 +1,50 @@
 package com.si.demo.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.si.demo.entity.Course;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
-@Getter
+import java.time.LocalDateTime;
+
+//@Setter
+//@Getter
 public class EnquiryRequestDto {
 
-//    private Integer enqId;
+    private Integer enqId;
     private String stuName;
     private String stuPhno;
     private String classMode;
     private String enqStatus;
     private Integer courseId;
+
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDateTime createdAt;
+
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDateTime updatedAt;
  //   private Integer counsellorId;
 
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Integer getEnqId() {        return enqId;    }
+
+    public void setEnqId(Integer enqId) {        this.enqId = enqId;    }
 
     public String getStuName() {
         return stuName;

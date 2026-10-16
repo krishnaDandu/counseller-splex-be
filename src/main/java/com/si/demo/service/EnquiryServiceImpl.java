@@ -61,6 +61,42 @@ public class EnquiryServiceImpl implements EnquiryService {
     }
 
     @Override
+    @Transactional
+    public Enquiry upDateEnquiry(Integer enquiryId , EnquiryRequestDto requestDto) {
+
+        // Fetch the existing enquiry
+        Enquiry enquiry = enquiryRepo.findById(enquiryId)
+                .orElseThrow(()-> new RuntimeException("Enquiry not found"));
+
+        Course course = courseRepo.findById(requestDto.getCourseId())
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+
+        // Verify that this enquiry belongs to the logged-in counsellor
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        if(!enquiry.getCounsellor().getEmail().equals(email)){
+            throw new org.springframework.security
+                    .access.AccessDeniedException("You are not allowed to update this enquiry");
+        }
+
+
+        //Update ONLY the permitted fields
+        //Enquiry updateEnquiry = new Enquiry();
+        enquiry.setStuPhno(requestDto.getStuPhno());
+        enquiry.setClassMode(requestDto.getClassMode());
+        enquiry.setCourse(course);
+        //updateEnquiry.setStuName(requestDto.getStuName());
+        //updateEnquiry.setEnqStatus(requestDto.getEnqStatus());
+        //updateEnquiry.setCounsellor(counsellor);
+
+        // Save the existing enquiry
+        return enquiryRepo.save(enquiry);
+    }
+
+    @Override
     public List<Enquiry> findAllEnquiry() {
         return enquiryRepo.findAll();
     }
@@ -86,6 +122,7 @@ public class EnquiryServiceImpl implements EnquiryService {
                     }
 
                     dto.setCreatedAt(enquiry.getCreatedAt());
+                    dto.setUpdatedAt(enquiry.getUpdatedAt());
 
                     return dto;
                 })

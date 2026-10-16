@@ -10,6 +10,8 @@ public interface EnquiryService {
 
     Enquiry saveEnquiry(EnquiryRequestDto enquiryRequestDto);
 
+    Enquiry upDateEnquiry(Integer enquiryId, EnquiryRequestDto enquiryRequestDto);
+
     List<Enquiry> findAllEnquiry();
 
     //List<Enquiry> findByCounsellorId(Integer counsellorId);

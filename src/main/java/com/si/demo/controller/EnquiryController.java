@@ -2,6 +2,7 @@ package com.si.demo.controller;
 
 import com.si.demo.dto.*;
 import com.si.demo.entity.Enquiry;
+import com.si.demo.repo.EnquiryRepo;
 import com.si.demo.service.EnquiryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,36 @@ public class EnquiryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    //On Edit of the Enquiry update
+    @PutMapping("/updateenquiry/{enqId}")
+    public ResponseEntity<ApiResponseDto<EnquiryRequestDto>> updateEnquiry(
+            @PathVariable Integer enqId, @RequestBody EnquiryRequestDto requestDto){
+
+        Enquiry updatedEnquiry = enquiryService.upDateEnquiry(enqId, requestDto);
+
+        EnquiryRequestDto response = new EnquiryRequestDto();
+        response.setEnqId(updatedEnquiry.getEnqId());
+        response.setStuName(updatedEnquiry.getStuName());
+        response.setStuPhno(updatedEnquiry.getStuPhno());
+        response.setClassMode(updatedEnquiry.getClassMode());
+        response.setEnqStatus(updatedEnquiry.getEnqStatus());
+        response.setCreatedAt(updatedEnquiry.getCreatedAt());
+        response.setUpdatedAt(updatedEnquiry.getUpdatedAt());
+
+        if (updatedEnquiry.getCourse() != null) {
+            response.setCourseId(updatedEnquiry.getCourse().getCourseId());
+            //response.setCourseName(updatedEnquiry.getCourse().getCourseName());
+        }
+
+        ApiResponseDto<EnquiryRequestDto> apiResponse = new ApiResponseDto<>();
+
+        apiResponse.setMessage("Enquiry updated successfully");
+        apiResponse.setData(response);
+
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
 //    @PostMapping("/save")
 //    public ResponseEntity<EnquiryResponseDto> saveEnquiry(@RequestBody EnquiryRequestDto request){
 //
@@ -61,6 +92,7 @@ public class EnquiryController {
 //        return ResponseEntity.ok(resEnquiry);
 //    }
 
+    // Get all Enquiries based on the Counsellor Login ID - counsellorId
     @GetMapping("/getAllEnquiries")
     public ResponseEntity<ApiResponseDto<List<EnquiryResponseDto>>> getAllEnquries(@RequestParam Integer counsellorId){
         ApiResponseDto<List<EnquiryResponseDto>> response = enquiryService.findByCounsellorId(counsellorId);
@@ -68,6 +100,7 @@ public class EnquiryController {
         return ResponseEntity.ok(response);
     }
 
+    //Get all Enquiries Search based on the StudentName, StudentPhone and Course
     @GetMapping("/search")
     public ResponseEntity<Map<String, Object>> getEnquriesBySearch(@ModelAttribute EnquiryFilterDto filterDto){
 
@@ -81,12 +114,15 @@ public class EnquiryController {
         return ResponseEntity.ok(response);
     }
 
+    // Get all the Dashboard Enquires count
     @GetMapping("/dashboardChart")
     public ResponseEntity<DashboardEnquiryChatResponseDto> getDashboard(){
         DashboardEnquiryChatResponseDto response = enquiryService.getDashboardCounts();
         System.out.println("getDashboard : " + response );
         return ResponseEntity.ok(response);
     }
+
+
 
 
 }

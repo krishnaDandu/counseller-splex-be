@@ -1,5 +1,6 @@
 package com.si.demo.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,8 +8,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class EnquiryResponseDto {
@@ -19,6 +18,20 @@ public class EnquiryResponseDto {
     private String classMode;
     private String enqStatus;
     private Integer courseId;
+
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDateTime createdAt;
+
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDateTime updatedAt;
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
     public Integer getEnqId() {
         return enqId;
@@ -85,5 +98,5 @@ public class EnquiryResponseDto {
     }
 
     private String courseName;
-    private LocalDateTime createdAt;
+
 }
